@@ -1,10 +1,63 @@
-//////////////////////////
-// DOM Elements
+////////////////////////////////////////////////////
+// DOM ELEMENTS
 
+////////////////////////////////////////////////////
+// MODEL
+
+const validateFormData = (data: string[]): boolean => {
+  //
+};
+
+const formData = (data: string[]) => {
+  validateFormData(data);
+  // return valid / not valid to controller
+  // if valid, store data (project class?)
+};
+
+////////////////////////////////////////////////////
+// CONTROLLER
+
+// initialize the form from template
+const initForm = () => {
+  // call on view to render form
+};
+
+// handle form submission
+const submitHandler = (event: Event): string[] => {
+  // pass form data to model
+  // recieve form data validation from model and update view
+  // call Controller view proj update accordingly from validation
+};
+
+////////////////////////////////////////////////////
+// VIEW
+
+// render form
+const renderForm = () => {
+  // render form to UI
+  // add eventListener to submit (pass to Controller handler)
+};
+
+// render single project list item from template
+const renderProject = (projItem: any) => {
+  // create project list item from template
+  // create ul from template
+  // add li to ul and append to app div
+};
+
+////////////////////////////////////////////////////////////
 console.log("works");
 
 const projInputForm = document.getElementById(
   "project-input"
+)! as HTMLTemplateElement;
+
+const singleProj = document.getElementById(
+  "single-project"
+)! as HTMLTemplateElement;
+
+const projList = document.getElementById(
+  "project-list"
 )! as HTMLTemplateElement;
 
 const form = projInputForm.content.cloneNode(true);
@@ -33,6 +86,7 @@ const initForm = (form: any) => {
       console.log((newFormEl.elements[i] as HTMLInputElement).value);
       const input: string = (newFormEl.elements[i] as HTMLInputElement).value;
       formData.push(input);
+      // newFormEl.elements[i].textContent = "";
     }
     console.log(formData);
 
