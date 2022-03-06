@@ -16,6 +16,7 @@ const appContainerEl = document.getElementById("app")! as HTMLDivElement;
 
 const initProject = (arr: string[]) => {
   const project = new Project(...arr);
+  console.log(project);
 };
 
 const initForm = (form: any) => {
@@ -74,9 +75,9 @@ class Project {
   description: string;
   people: number;
 
-  constructor(t: string, d: string, p: number) {
-    this.title = t;
-    this.description = d;
-    this.people = p;
+  constructor(...args) {
+    this.title = args[0];
+    this.description = args[1];
+    this.people = args[2];
   }
 }
