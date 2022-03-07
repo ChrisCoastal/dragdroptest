@@ -56,6 +56,18 @@ class ProjectState extends State<Project> {
       ProjectStatus.Active
     );
     this.projects.push(newProject);
+    this.updateListeners();
+  }
+
+  moveProject(projectId: string, newStatus: ProjectStatus) {
+    const projectToMove = this.projects.find((proj) => proj.id === projectId);
+    if (projectToMove && projectToMove.activeStatus !== newStatus) {
+      projectToMove.activeStatus = newStatus;
+      this.updateListeners();
+    }
+  }
+
+  private updateListeners() {
     for (const listenerFn of this.listeners) {
       listenerFn(this.projects.slice()); // slice creates a copy, so original isn't modified unintentionally
     }
@@ -178,7 +190,8 @@ class ProjectItem
 
   @Binder
   dragStartHandler(event: DragEvent) {
-    console.log(event);
+    event.dataTransfer!.setData("text/plain", this.project.id);
+    event.dataTransfer!.effectAllowed = "move";
   }
   @Binder
   dragEndHandler(_: DragEvent) {
@@ -219,13 +232,23 @@ class ProjectList
   }
 
   @Binder
-  dragOverHandler(_: DragEvent) {
-    const listEl = this.element.querySelector("ul")! as HTMLUListElement;
-    listEl.classList.add("droppable");
+  dragOverHandler(event: DragEvent) {
+    if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
+      event.preventDefault(); // drop event will only be allowed if the drop element has preventDefault()
+      const listEl = this.element.querySelector("ul")! as HTMLUListElement;
+      listEl.classList.add("droppable");
+    }
   }
-  dropHandler(_: DragEvent) {
-    //
+
+  @Binder
+  dropHandler(event: DragEvent) {
+    const projId = event.dataTransfer!.getData("text/plain");
+    projectState.moveProject(
+      projId,
+      this.status === "active" ? ProjectStatus.Active : ProjectStatus.Finished
+    );
   }
+
   @Binder
   dragLeaveHandler(_: DragEvent) {
     const listEl = this.element.querySelector("ul")! as HTMLUListElement;
