@@ -4,8 +4,6 @@
 ////////////////////////////////////////////////////
 // MODEL
 
-class
-
 const validateFormData = (data: [string, FormDataEntryValue][]): boolean => {
   console.log(data);
   return true;
