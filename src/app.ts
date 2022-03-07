@@ -106,24 +106,59 @@ function validate(formInput: Validation) {
 
 // CLASSES
 
-// ProjectList Class
-class ProjectList {
+// Component Base Class
+
+abstract class Component<T extends HTMLElement, U extends HTMLElement> {
   templateEl: HTMLTemplateElement;
-  hostEl: HTMLDivElement;
-  element: HTMLElement;
+  hostEl: T;
+  element: U;
+
+  constructor(
+    templateId: string,
+    hostElementId: string,
+    insertBegin: boolean,
+    newElementId?: string
+  ) {
+    this.templateEl = document.getElementById(
+      templateId
+    )! as HTMLTemplateElement;
+    this.hostEl = document.getElementById(hostElementId)! as T;
+
+    const importedNode = document.importNode(this.templateEl.content, true);
+    this.element = importedNode.firstElementChild as U;
+    if (newElementId) this.element.id = newElementId;
+
+    this.attach(insertBegin);
+  }
+
+  private attach(insert: boolean) {
+    this.hostEl.insertAdjacentElement(
+      insert ? "afterbegin" : "beforeend",
+      this.element
+    );
+  }
+  abstract _configure(): void;
+  abstract _renderContent(): void;
+}
+
+// ProjectList Class
+class ProjectList extends Component<HTMLDivElement, HTMLElement> {
+  // templateEl: HTMLTemplateElement;
+  // hostEl: HTMLDivElement;
+  // element: HTMLElement;
   assignedProjects: Project[];
 
   constructor(private status: "active" | "finished") {
-    this.templateEl = document.getElementById(
-      "project-list"
-    )! as HTMLTemplateElement;
-    this.hostEl = document.getElementById("app")! as HTMLDivElement;
+    super("project-list", "app", false, `${status}-projects`);
+
     this.assignedProjects = [];
 
-    const importedNode = document.importNode(this.templateEl.content, true);
-    this.element = importedNode.firstElementChild as HTMLElement;
-    this.element.id = `${this.status}-projects`;
+    // renders project lists
+    this._configure();
+    this._renderContent();
+  }
 
+  _configure() {
     projectState.addListener((projects: Project[]) => {
       const filterProjectStatus = projects.filter((proj) => {
         proj.activeStatus === ProjectStatus.Active;
@@ -135,11 +170,6 @@ class ProjectList {
       this.assignedProjects = filterProjectStatus;
       this.renderProjects();
     });
-
-    this.attach();
-
-    // renders project lists
-    this.renderContent();
   }
 
   private renderProjects() {
@@ -157,15 +187,11 @@ class ProjectList {
     }
   }
 
-  private renderContent() {
+  _renderContent() {
     const listId = `${this.status}-projects-list`;
     this.element.querySelector("ul")!.id = listId;
     this.element.querySelector("h2")!.textContent =
       this.status.toUpperCase() + " PROJECTS";
-  }
-
-  private attach() {
-    this.hostEl.insertAdjacentElement("beforeend", this.element);
   }
 }
 
