@@ -212,7 +212,7 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> {
     listEl.innerHTML = "";
     // rendering all the user createdprojects
     for (const projItem of this.assignedProjects) {
-      new ProjectItem(this.element.id, projItem);
+      new ProjectItem(this.element.querySelector("ul")!.id, projItem);
     }
   }
 }
