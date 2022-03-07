@@ -137,6 +137,8 @@ class ProjectList {
     });
 
     this.attach();
+
+    // renders project lists
     this.renderContent();
   }
 
@@ -145,6 +147,8 @@ class ProjectList {
       `${this.status}-projects-list`
     )! as HTMLUListElement;
 
+    // clear all current projects from list
+    listEl.innerHTML = "";
     // rendering all the user createdprojects
     for (const projItem of this.assignedProjects) {
       const listItem = document.createElement("li");
