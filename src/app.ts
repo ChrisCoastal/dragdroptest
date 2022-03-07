@@ -1,27 +1,48 @@
+// Project Type
+
+enum ProjectStatus {
+  Active,
+  Finished,
+}
+
+class Project {
+  constructor(
+    public id: string,
+    public title: string,
+    public desc: string,
+    public people: number,
+    public activeStatus: ProjectStatus
+  ) {
+    //
+  }
+}
+
 // State Management
+type Listener = (items: Project[]) => void;
 
 class ProjectState {
-  private listeners: any[] = []; // subscriber
-  private projects: any[] = [];
+  private listeners: Listener[] = []; // subscriber
+  private projects: Project[] = [];
   private static instance: ProjectState;
 
   private constructor() {
     //
   }
   addProject(t: string, d: string, p: number) {
-    const newProject = {
-      id: Math.random().toString(),
-      title: t,
-      desc: d,
-      people: p,
-    };
+    const newProject = new Project(
+      Math.random.toString(),
+      t,
+      d,
+      p,
+      ProjectStatus.Active
+    );
     this.projects.push(newProject);
     for (const listenerFn of this.listeners) {
       listenerFn(this.projects.slice()); // slice creates a copy, so original isn't modified unintentionally
     }
   }
 
-  addListener(listenerFn: Function) {
+  addListener(listenerFn: Listener) {
     this.listeners.push(listenerFn);
   }
 
@@ -90,7 +111,7 @@ class ProjectList {
   templateEl: HTMLTemplateElement;
   hostEl: HTMLDivElement;
   element: HTMLElement;
-  assignedProjects: any[];
+  assignedProjects: Project[];
 
   constructor(private status: "active" | "finished") {
     this.templateEl = document.getElementById(
@@ -103,8 +124,15 @@ class ProjectList {
     this.element = importedNode.firstElementChild as HTMLElement;
     this.element.id = `${this.status}-projects`;
 
-    projectState.addListener((projects: any[]) => {
-      this.assignedProjects = projects;
+    projectState.addListener((projects: Project[]) => {
+      const filterProjectStatus = projects.filter((proj) => {
+        proj.activeStatus === ProjectStatus.Active;
+        if (this.status === "active") {
+          return proj.activeStatus === ProjectStatus.Active;
+        }
+        return proj.activeStatus === ProjectStatus.Finished;
+      });
+      this.assignedProjects = filterProjectStatus;
       this.renderProjects();
     });
 
