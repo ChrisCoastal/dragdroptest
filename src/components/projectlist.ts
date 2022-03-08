@@ -1,9 +1,9 @@
-import { Component } from "./basecomponent.js";
-import { ProjectItem } from "./projectitem.js";
-import { Binder } from "../decorators/binderdecorator.js";
-import { Droppable } from "../model/dragdropinterface.js";
-import { projectState } from "../state/projectstate.js";
-import { Project, ProjectStatus } from "../model/projectmodel.js";
+import { Component } from './basecomponent';
+import { ProjectItem } from './projectitem';
+import { Binder } from '../decorators/binderdecorator';
+import { Droppable } from '../model/dragdropinterface';
+import { projectState } from '../state/projectstate';
+import { Project, ProjectStatus } from '../model/projectmodel';
 
 // ProjectList Class
 export class ProjectList
@@ -15,8 +15,8 @@ export class ProjectList
   // element: HTMLElement;
   assignedProjects: Project[];
 
-  constructor(private status: "active" | "finished") {
-    super("project-list", "app", false, `${status}-projects`);
+  constructor(private status: 'active' | 'finished') {
+    super('project-list', 'app', false, `${status}-projects`);
 
     this.assignedProjects = [];
 
@@ -27,36 +27,36 @@ export class ProjectList
 
   @Binder
   dragOverHandler(event: DragEvent) {
-    if (event.dataTransfer && event.dataTransfer.types[0] === "text/plain") {
+    if (event.dataTransfer && event.dataTransfer.types[0] === 'text/plain') {
       event.preventDefault(); // drop event will only be allowed if the drop element has preventDefault()
-      const listEl = this.element.querySelector("ul")! as HTMLUListElement;
-      listEl.classList.add("droppable");
+      const listEl = this.element.querySelector('ul')! as HTMLUListElement;
+      listEl.classList.add('droppable');
     }
   }
 
   @Binder
   dropHandler(event: DragEvent) {
-    const projId = event.dataTransfer!.getData("text/plain");
+    const projId = event.dataTransfer!.getData('text/plain');
     projectState.moveProject(
       projId,
-      this.status === "active" ? ProjectStatus.Active : ProjectStatus.Finished
+      this.status === 'active' ? ProjectStatus.Active : ProjectStatus.Finished
     );
   }
 
   @Binder
   dragLeaveHandler(_: DragEvent) {
-    const listEl = this.element.querySelector("ul")! as HTMLUListElement;
-    listEl.classList.remove("droppable");
+    const listEl = this.element.querySelector('ul')! as HTMLUListElement;
+    listEl.classList.remove('droppable');
   }
 
   _configure() {
-    this.element.addEventListener("dragover", this.dragOverHandler);
-    this.element.addEventListener("dragleave", this.dragLeaveHandler);
-    this.element.addEventListener("drop", this.dropHandler);
+    this.element.addEventListener('dragover', this.dragOverHandler);
+    this.element.addEventListener('dragleave', this.dragLeaveHandler);
+    this.element.addEventListener('drop', this.dropHandler);
     projectState.addListener((projects: Project[]) => {
       const filterProjectStatus = projects.filter((proj) => {
         proj.activeStatus === ProjectStatus.Active;
-        if (this.status === "active") {
+        if (this.status === 'active') {
           return proj.activeStatus === ProjectStatus.Active;
         }
         return proj.activeStatus === ProjectStatus.Finished;
@@ -68,9 +68,9 @@ export class ProjectList
 
   _renderContent() {
     const listId = `${this.status}-projects-list`;
-    this.element.querySelector("ul")!.id = listId;
-    this.element.querySelector("h2")!.textContent =
-      this.status.toUpperCase() + " PROJECTS";
+    this.element.querySelector('ul')!.id = listId;
+    this.element.querySelector('h2')!.textContent =
+      this.status.toUpperCase() + ' PROJECTS';
   }
 
   private renderProjects() {
@@ -79,10 +79,10 @@ export class ProjectList
     )! as HTMLUListElement;
 
     // clear all current projects from list
-    listEl.innerHTML = "";
+    listEl.innerHTML = '';
     // rendering all the user createdprojects
     for (const projItem of this.assignedProjects) {
-      new ProjectItem(this.element.querySelector("ul")!.id, projItem);
+      new ProjectItem(this.element.querySelector('ul')!.id, projItem);
     }
   }
 }

@@ -13,16 +13,16 @@ export function validate(formInput: Validation) {
   if (formInput.required) {
     isValid = isValid && formInput.value.toString().trim().length !== 0;
   }
-  if (formInput.minLength != null && typeof formInput.value === "string") {
+  if (formInput.minLength != null && typeof formInput.value === 'string') {
     isValid = isValid && formInput.value.length >= formInput.minLength;
   }
-  if (formInput.maxLength != null && typeof formInput.value === "string") {
+  if (formInput.maxLength != null && typeof formInput.value === 'string') {
     isValid = isValid && formInput.value.length <= formInput.maxLength;
   }
-  if (formInput.min != null && typeof formInput.value === "number") {
+  if (formInput.min != null && typeof formInput.value === 'number') {
     isValid = isValid && formInput.value >= formInput.min;
   }
-  if (formInput.max != null && typeof formInput.value === "number") {
+  if (formInput.max != null && typeof formInput.value === 'number') {
     isValid = isValid && formInput.value <= formInput.max;
   }
   //

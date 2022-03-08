@@ -1,5 +1,5 @@
-import { ProjectInput } from "./components/projectinput.js";
-import { ProjectList } from "./components/projectlist.js";
+import { ProjectInput } from './components/projectinput';
+import { ProjectList } from './components/projectlist';
 
 // CLASSES
 
@@ -7,5 +7,5 @@ import { ProjectList } from "./components/projectlist.js";
 new ProjectInput();
 
 // render active/finished project sections
-new ProjectList("active");
-new ProjectList("finished");
+new ProjectList('active');
+new ProjectList('finished');

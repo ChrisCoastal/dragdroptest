@@ -1,7 +1,7 @@
-import { Component } from "./basecomponent.js";
-import { validate, Validation } from "../util/validation.js";
-import { Binder } from "../decorators/binderdecorator.js";
-import { projectState } from "../state/projectstate.js";
+import { Component } from './basecomponent';
+import { validate, Validation } from '../util/validation';
+import { Binder } from '../decorators/binderdecorator';
+import { projectState } from '../state/projectstate';
 
 // ProjectInput Class
 export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
@@ -10,16 +10,16 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
   peopleInputEl: HTMLInputElement;
 
   constructor() {
-    super("project-input", "app", true, "user-input");
+    super('project-input', 'app', true, 'user-input');
 
     this.titleInputEl = this.element.querySelector(
-      "#title"
+      '#title'
     ) as HTMLInputElement;
     this.descInputEl = this.element.querySelector(
-      "#description"
+      '#description'
     ) as HTMLInputElement;
     this.peopleInputEl = this.element.querySelector(
-      "#people"
+      '#people'
     ) as HTMLInputElement;
 
     this._configure();
@@ -29,7 +29,7 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
 
   _configure() {
     // this.element.addEventListener("submit", this.submitHandler.bind(this));
-    this.element.addEventListener("submit", this.submitHandler); // with decorator
+    this.element.addEventListener('submit', this.submitHandler); // with decorator
   }
 
   private gatherUserInput(): [string, string, number] | void {
@@ -63,16 +63,16 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
       !validate(descValidation) ||
       !validate(peopleValidation)
     ) {
-      alert("Invalid input please try again");
+      alert('Invalid input please try again');
       return;
     }
     return [enteredTitle, enteredDesc, +enteredPeople];
   }
 
   private clearInputs() {
-    this.titleInputEl.value = "";
-    this.descInputEl.value = "";
-    this.peopleInputEl.value = "";
+    this.titleInputEl.value = '';
+    this.descInputEl.value = '';
+    this.peopleInputEl.value = '';
   }
 
   @Binder // note that the decorator goes here
